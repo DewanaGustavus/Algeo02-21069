@@ -1,7 +1,7 @@
 import numpy as np
 import math
 
-def QR(A):
+def QR(A, eigenvector):
     ctr = 1
     while ctr != 10000:
         A = np.transpose(A)
@@ -14,26 +14,27 @@ def QR(A):
                     sum += math.pow(tempval[j], 2)
                 sum = math.sqrt(sum)
                 tempval = (tempval / sum)
-                Q = [tempval]
+                eigenvector = [tempval]
             else:
                 starttempval = tempval
                 for k in range(i):
-                    tempval = (tempval - ((np.dot(Q[k], starttempval)) * Q[k]))
+                    tempval = (tempval - ((np.dot(eigenvector[k], starttempval)) * eigenvector[k]))
 
                 for j in range(len(tempval)):
                     sum += math.pow(tempval[j], 2)
                 sum = math.sqrt(sum)
                 tempval = (tempval / sum)
-                Q = np.append(Q, [tempval], axis=0)
+                eigenvector = np.append(eigenvector, [tempval], axis=0)
                 
-        Q = np.transpose(Q)
-        inverse = np.transpose(Q)
+        eigenvector = np.transpose(eigenvector)
+        inverse = np.transpose(eigenvector)
         A = np.matmul(inverse, A)
-        A = np.matmul(A, Q)
+        A = np.matmul(A, eigenvector)
+        
         A = np.transpose(A)
         ctr+=1
-    
-    return A
+
+    return A, eigenvector
 
 def getEigenValue(A):
     for i in range(len(A)):
@@ -99,30 +100,18 @@ C = np.multiply(Xmt, Xm)
 
 # mencari nilai eigen dari C
 # ambil nilai eigen max dari segala kemungkinan
-maxEigen = maxVal(getEigenValue(QR(C)))
+maxEigen = maxVal(getEigenValue(eigenvectorR(C)))
 
 # misalkan K sehingga K < M
 K = len(C) - 1
 
 
 
+# A = [[3, -4, -2], [-1, 4, 1], [2, -6, -1]]
+# eigenvector = [[]]
+# n, m = np.shape(A) 
+# A = np.random.rand(n, 30)
+# A, eigenvector = np.linalg.qr(A)
 
-a = np.append(a, [1,2,3,4])
-a = a.flatten()
-for i in range(len(a)):
-    print(a[i])
-
-# append matrixnya sementara
-# transpose matrixnya biar jadi N^2 x M
-
-p2 = np.roots([1, -23, 185, -625, 894, -432])
-print ("Roots of P2 : ", p2)
-p = np.array([x, 0, 0], [0, x, 0], [0, 0, x])
-print(p)
-p1 = np.poly1d([1, -1])
-p2 = np.poly1d([1, -17])
-print(np.roots(np.polymul(p1, p2)))
-
-# pakai metode QR yang diimplementasikan sendiri
-# untuk mempermudah perhitungan, maka kita transposekan matrixnya terlebih dahulu
-
+# print(eigenvector)
+# print("")
