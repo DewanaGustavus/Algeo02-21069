@@ -54,10 +54,11 @@ def maxVal(A):
     
     return temp
 
-# mengubah matrix jadi N^2, harus di loop untuk setiap gambar
+# mengubah matrix jadi M x N^2 , harus di loop untuk setiap gambar
 first = True
 
 for x in daftarface:
+    x = np.array(x)
     x = x.flatten()
     if (first):
         first = False
@@ -65,7 +66,7 @@ for x in daftarface:
     else:
         Xm = np.append(Xm, x, axis = 0)
 
-# matrix m x N^2
+# matrix berupa m x N^2 karena menggunakan append
 # ubah ke N^2 x M
 Xm = np.transpose(Xm)
 # cari mean
@@ -88,30 +89,90 @@ for i in range(len(Xm)):
 # transpose sementara matrixnya agar dapat dikurangi dengan mean
 Xm = np.transpose(Xm)
 for i in range(len(Xm)):
-    np.subtract(Xm[i], psi)
+    Xm[i] = np.subtract(Xm[i], psi)
 # Xm sudah menjadi am
-# transpose kembali ke awal 
-Xm = np.transpose(Xm)
+
+A_normal = Xm
 # matrix M x N^2
-Xmt = np.transpose(Xm)
+A_transpose = np.transpose(A_normal)
 
 # cari matrix C'
-C = np.multiply(Xmt, Xm)
+C_aksen = np.multiply(A_transpose, A_normal)
 
-# mencari nilai eigen dari C
-# ambil nilai eigen max dari segala kemungkinan
-maxEigen = maxVal(getEigenValue(eigenvectorR(C)))
+# mencari eigenvector
+# eigenface berupa tiap kolom pada eigenvector/tiap baris pada eigenvector yang di transpose
+eigenvector = [[]]
+C_aksen, eigenvector = QR(C_aksen, eigenvector)
+
+# transposekan eigenvector agar eigenface bisa diambil per baris
+eigenvector = np.transpose(eigenvector)
 
 # misalkan K sehingga K < M
-K = len(C) - 1
+K = len(C_aksen) - 1
+for i in range(len(C_aksen)):
+    # looping sigma perkalian wj dengan uj
+    sum = 0
+    # looping sebanyak K
+    for j in range(K):
+        u = eigenvector[i]
+
+        # looping untuk menghitung vektor satuan dari eigenvector
+        sumtemp = 0
+        for k in range(len(u)):
+            sumtemp += math.pow(u[k], 2)
+        sumtemp = math.sqrt(sumtemp)
+        u = (u/sumtemp)
+
+        # dotkan uj dengan ai
+        temp = np.dot(u, A_normal[i]) # nilai wi
+
+        if (j == 0):
+            w = [temp]
+        else:
+            w = np.append(w, [temp])
+    # memasukkan eigenfaces baru, misalkan Omega
+    if (i == 0):
+        Omega = [w]
+    else:
+        Omega = np.append(Omega, [w], axis=0)
+# Omega telah terbentuk
 
 
+# BAGIAN TESTING #
 
-# A = [[3, -4, -2], [-1, 4, 1], [2, -6, -1]]
-# eigenvector = [[]]
-# n, m = np.shape(A) 
-# A = np.random.rand(n, 30)
-# A, eigenvector = np.linalg.qr(A)
+# input gambar tes
+input = np.array(input)
+input = input.flatten()
+input = np.subtract(input, psi)
 
-# print(eigenvector)
-# print("")
+for j in range(K):
+    u = input
+
+    # looping untuk menghitung vektor satuan dari eigenvector
+    sumtemp = 0
+    for k in range(len(u)):
+        sumtemp += math.pow(u[k], 2)
+    sumtemp = math.sqrt(sumtemp)
+    u = (u/sumtemp)
+
+    # dotkan uj dengan ai
+    temp = np.dot(u, input) # nilai wi
+
+    if (j == 0):
+        w_new = [temp]
+    else:
+        w_new = np.append(w_new, [temp])
+
+# looping setiap Omega dataset dan cari yang paling minim selisihnya
+for i in range(len(C_aksen)):
+    sum = 0
+    for j in range(K):
+        sum += math.pow(w_new[j] - Omega[i][j], 2)
+
+    if i == 0:
+        min = sum
+        idxmin = 0
+    else:
+        if min > sum:
+            min = sum
+            idxmin = i  # idxmin adalah index foto yang paling mendekati input
