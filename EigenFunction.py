@@ -15,28 +15,53 @@ def euclid_distance(A, B):
         dist += math.pow(A[i] - B[i], 2)
     return dist
 
-def QR(A, eigenvector):
-    for ctr in range(10000):
+def length(A):
+    sum = 0
+
+    for i in A:
+        sum += math.pow(i, 2)
+
+    return sum
+
+def QR(A):
+    ctr = 1
+    while ctr != 10000:
         A = np.transpose(A)
         # looping menghitung matrix
-        eigenvector = [vectorsatuan(A[0])]
-        for i in range(1, len(A)):
+        for i in range(len(A)):
             tempval = A[i]
             sum = 0
-            starttempval = tempval
-            for eigen in eigenvector:
-                tempval -= (np.dot(eigen, starttempval)) * eigen
+            if i == 0:
+                for j in range(len(tempval)):
+                    sum += math.pow(tempval[j], 2)
+                sum = math.sqrt(sum)
+                tempval = (tempval / sum)
+                eigenvector = [tempval]
+            else:
+                starttempval = tempval
+                for k in range(i):
+                    tempval = (tempval - (((np.dot(eigenvector[k], starttempval)) / length(eigenvector[k])) * eigenvector[k]))
 
-            eigenvector = np.append(eigenvector, [vectorsatuan(tempval)], axis = 0)
+                for j in range(len(tempval)):
+                    sum += math.pow(tempval[j], 2)
+                sum = math.sqrt(sum)
+                tempval = (tempval / sum)
+                eigenvector = np.append(eigenvector, [tempval], axis=0)
                 
         eigenvector = np.transpose(eigenvector)
         inverse = np.transpose(eigenvector)
+
+        if ctr == 1:
+            temp = np.transpose(eigenvector)
+        else:
+            temp = np.matmul(temp, np.transpose(eigenvector))
         A = np.matmul(inverse, A)
         A = np.matmul(A, eigenvector)
         
         A = np.transpose(A)
+        ctr+=1
 
-    return A, eigenvector
+    return A, temp
 
 def getEigenValue(A):
     eigenvalue = [A[0][0]]
