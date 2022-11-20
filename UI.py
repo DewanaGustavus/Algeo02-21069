@@ -3,6 +3,8 @@ from tkinter import filedialog
 import tkinter.ttk as ttk
 from PIL import ImageTk, Image
 from tkinter.filedialog import askopenfilenames
+from OpenCV import *
+from timeit import default_timer as timer
 
 # BUTTON FUNCTIONS
 def browse_button():
@@ -15,10 +17,14 @@ def browse_button():
 
 def open_img():
 	global img
+	global imagematrix
+
 	x = openfilename()
 	imgtemp = Image.open(x)
 	imgtemp = imgtemp.resize((256, 256), Image.Resampling.LANCZOS)
 	img.paste(imgtemp)
+
+	imagematrix = image_to_matrix(x)
 
 def openfilename():
 	# open file dialog box to select image
@@ -31,6 +37,29 @@ def select_file():
 	file_names = askopenfilenames(initialdir = "/",
 								title = "Select File")
 
+def start_training():
+    start=timer()
+    global hasiltraining
+    global folder_path
+    global time_elapsed
+    
+    imagearray = open_image_folder_to_matrix(folder_path.get()+'/')
+    hasiltraining = EigenFunction.training(imagearray)
+    end=timer()
+    time_elapsed.set("Time elapsed: " + str(end-start)+ " s") 
+
+def recognize():
+    global imagematrix
+    global hasiltraining
+    global folder_path
+    global img2
+    closestidx = EigenFunction.indeks_gambar_terdekat(imagematrix, hasiltraining)
+    savepath = "closestimage.png"
+    save_image_folder_idx(folder_path.get()+ '/', closestidx, savepath)
+    imgtemp = Image.open(savepath)
+    imgtemp = imgtemp.resize((256, 256), Image.Resampling.LANCZOS)
+    img2.paste(imgtemp)
+    
 # ROOT
 window = Tk()
 window.title("Face Recognition Program")
@@ -86,6 +115,17 @@ label2.grid(column=0, row=3)
 # Button to choose image for recognition
 button3 = Button(frame2,text="Browse", command=open_img)
 button3.grid(row=4, column=0,pady=(0,120))
+
+button4= Button(frame2, text="Start training",command=start_training)
+button4.grid(row=5,column=0)
+
+time_elapsed = StringVar()
+time_elapsed.set("Time elapsed :")
+label3 = Label(frame2, textvariable=time_elapsed, font=("Microsoft JhengHei UI Light", 10), bg="white")
+label3.grid(column=0, row=6)
+
+button5= Button(frame2, text="Recognize",command=recognize)
+button5.grid(row=7,column=0)
 
 label3 = Label(frame3, text="Test Image", font=("Microsoft JhengHei UI Light", 13), bg="white")
 label3.grid(column=0, row=0)

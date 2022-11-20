@@ -142,7 +142,7 @@ def training(daftarface):
     return hasiltraining
 
 def indeks_gambar_terdekat(imagematrix, datatraining):
-    K, psi, C_aksen, Omega, eigenface = datatraining
+    K, C_aksen, psi, Omega, eigenface = datatraining
     matrix = np.array(imagematrix).flatten()
     matrix = np.subtract(matrix, psi)
 
