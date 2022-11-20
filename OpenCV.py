@@ -47,11 +47,11 @@ def camera():
     cv.destroyAllWindows()
     
 if __name__ == "__main__":
-    folderpath = "anyatest\\"
+    folderpath = "dataset\\"
     
     # tes training
     imagearray = open_image_folder_to_matrix(folderpath)
-    K, C_aksen, psi, Omega, eigenface = EigenFunction.training(imagearray)
+    hasiltraining = EigenFunction.training(imagearray)
             
     files = os.listdir(folderpath)
     length = len(files)
@@ -61,7 +61,7 @@ if __name__ == "__main__":
         print(f"result {i} : ")
         
         imagematrix = image_to_matrix(image1path)
-        closestidx = EigenFunction.indeks_gambar_terdekat(imagematrix, K, psi, C_aksen, Omega, eigenface)
+        closestidx = EigenFunction.indeks_gambar_terdekat(imagematrix, hasiltraining)
         save_image_folder_idx(folderpath, closestidx, savepath)
     
     
