@@ -154,5 +154,6 @@ def start():
 	img2Label.grid(column=0, row=1,pady=(10,0))
 
 	window.mainloop()
- 
-start()
+
+if __name__ == "__main__":
+    start()
