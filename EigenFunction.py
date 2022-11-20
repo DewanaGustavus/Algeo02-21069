@@ -25,7 +25,7 @@ def length(A):
 
 def QR(A):
     ctr = 1
-    while ctr != 10000:
+    while ctr != 5000:
         A = np.transpose(A)
         # looping menghitung matrix
         for i in range(len(A)):
@@ -34,9 +34,9 @@ def QR(A):
             if i == 0:
                 for j in range(len(tempval)):
                     sum += math.pow(tempval[j], 2)
-                sum = math.sqrt(sum)
-                tempval = (tempval / sum)
-                eigenvector = [tempval]
+                sum = float(math.sqrt(sum))
+                tempval1 = (tempval / sum)
+                eigenvector = [tempval1]
             else:
                 starttempval = tempval
                 for k in range(i):
@@ -44,10 +44,11 @@ def QR(A):
 
                 for j in range(len(tempval)):
                     sum += math.pow(tempval[j], 2)
-                sum = math.sqrt(sum)
-                tempval = (tempval / sum)
+                sum = float(math.sqrt(sum))
+                tempval = (tempval / np.linalg.norm(tempval))
                 eigenvector = np.append(eigenvector, [tempval], axis=0)
-                
+
+        A = np.transpose(A)        
         eigenvector = np.transpose(eigenvector)
         inverse = np.transpose(eigenvector)
 
@@ -58,7 +59,6 @@ def QR(A):
         A = np.matmul(inverse, A)
         A = np.matmul(A, eigenvector)
         
-        A = np.transpose(A)
         ctr+=1
 
     return A, temp
@@ -71,53 +71,61 @@ def getEigenValue(A):
 
 def getW(A, B, K):
     temp = np.dot(vectorsatuan(A), B)
-    w = np.array([temp for i in range(K)])
-    return w
+    return temp
+
+def getEigenface(A, eigvec):
+    eigvec = np.transpose(eigvec)
+    temp = np.array([np.matmul(A, eigvec[i]) for i in range(len(eigvec))])
+    eigenface = np.transpose(temp)
+    return eigenface
 
 def training(daftarface):
     # mengubah matrix jadi M x N^2 , harus di loop untuk setiap gambar
     Xm = np.array([np.array(x).flatten() for x in daftarface])
-    
+
     # matrix berupa m x N^2 karena menggunakan append
     # ubah ke N^2 x M
     Xm = np.transpose(Xm)
     # membentuk mean    
     psi = np.array([sum(x)/len(x) for x in Xm])
-
     # kurangi semua matriks X menjadi a
     # transpose sementara matrixnya agar dapat dikurangi dengan mean
     Xm = np.transpose(Xm)
     Xm = np.array([np.subtract(x, psi) for x in Xm])
     # Xm sudah menjadi am
-
     A_normal = Xm
     # matrix M x N^2
     A_transpose = np.transpose(A_normal)
-
     # cari matrix C'
-    C_aksen = np.multiply(A_transpose, A_normal)
-
+    C_aksen = np.matmul(A_normal, A_transpose)
+    
     # mencari eigenvector
     # eigenface berupa tiap kolom pada eigenvector/tiap baris pada eigenvector yang di transpose
     eigenvector = [[]]
-    C_aksen, eigenvector = QR(C_aksen, eigenvector)
-
+    C_aksen, eigenvector = np.linalg.eig(C_aksen)
     # transposekan eigenvector agar eigenface bisa diambil per baris
-    eigenvector = np.transpose(eigenvector)
+    eigenface = getEigenface(A_transpose, eigenvector)
+    #eigenface = np.transpose(eigenface)
 
     # misalkan K sehingga K < M
     K = len(C_aksen) - 1
-    Omega = np.array([getW(eigenvector[i], A_normal[i], K) for i in range(len(C_aksen))]) # eigenfaces baru
+    
+    Omega = np.array([getW(eigenface[i], C_aksen[i], K) for i in range(len(C_aksen))]) # eigenfaces baru
     # Omega telah terbentuk
 
-    return C_aksen, psi, Omega
+    return K, C_aksen, psi, Omega, eigenface
 
-def indeks_gambar_terdekat(imagematrix, K, psi, C_aksen, Omega):
+def indeks_gambar_terdekat(imagematrix, K, psi, C_aksen, Omega, eigenface):
     matrix = np.array(imagematrix).flatten()
     matrix = np.subtract(matrix, psi)
+    print(matrix)
 
     # dotkan uj dengan ai
-    w_new = getW(matrix, matrix, K)
+    eigenface = np.transpose(eigenface)
+    # print(eigenface)
+    w_new = np.array([np.dot(vectorsatuan(eigenface[i]), matrix) for i in range(K)])
+    print(w_new)
+    print(Omega)
 
     # looping setiap Omega dataset dan cari yang paling minim selisihnya
     dist = [euclid_distance(w_new, Omega[i]) for i in range(len(C_aksen))]

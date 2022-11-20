@@ -47,14 +47,14 @@ def camera():
     cv.destroyAllWindows()
     
 if __name__ == "__main__":
-    folderpath = "anyatest\\"
-    image1path = folderpath + "anya 1.png"
+    folderpath = "dataset\\"
+    image1path = folderpath + "ina1.png"
     
     # tes training
     imagearray = open_image_folder_to_matrix(folderpath)
-    K, C_aksen, psi, Omega = EigenFunction.training(imagearray)
+    K, C_aksen, psi, Omega, eigenface = EigenFunction.training(imagearray)
     imagematrix = image_to_matrix(image1path)
-    closestidx = EigenFunction.indeks_gambar_terdekat(imagematrix, K, C_aksen, psi, Omega)
-    save_image_folder_idx(folderpath, closestidx, "closestanya.png")
+    closestidx = EigenFunction.indeks_gambar_terdekat(imagematrix, K, psi, C_aksen, Omega, eigenface)
+    save_image_folder_idx(folderpath, closestidx, "closest.png")
     
     
