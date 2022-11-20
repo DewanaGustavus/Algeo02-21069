@@ -118,7 +118,6 @@ def training(daftarface):
 def indeks_gambar_terdekat(imagematrix, K, psi, C_aksen, Omega, eigenface):
     matrix = np.array(imagematrix).flatten()
     matrix = np.subtract(matrix, psi)
-    print(matrix)
 
     # dotkan uj dengan ai
     eigenface = np.transpose(eigenface)

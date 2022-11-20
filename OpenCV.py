@@ -8,7 +8,7 @@ import numpy as np
 
 def image_to_matrix(imagepath):
     im = Image.open(imagepath)
-    sqrWidth = np.ceil(np.sqrt(im.size[0]*im.size[1])).astype(int)
+    sqrWidth = 256
     im_resize = im.resize((sqrWidth, sqrWidth))
     im_resize.save("tmpoutput.png")
     image = cv.imread("tmpoutput.png", 0) # 0 for black and white mode
@@ -47,14 +47,21 @@ def camera():
     cv.destroyAllWindows()
     
 if __name__ == "__main__":
-    folderpath = "dataset\\"
-    image1path = folderpath + "ina1.png"
+    folderpath = "anyatest\\"
     
     # tes training
     imagearray = open_image_folder_to_matrix(folderpath)
     K, C_aksen, psi, Omega, eigenface = EigenFunction.training(imagearray)
-    imagematrix = image_to_matrix(image1path)
-    closestidx = EigenFunction.indeks_gambar_terdekat(imagematrix, K, psi, C_aksen, Omega, eigenface)
-    save_image_folder_idx(folderpath, closestidx, "closest.png")
+            
+    files = os.listdir(folderpath)
+    length = len(files)
+    for i in range(1, length + 1):
+        image1path = folderpath + files[i-1]
+        savepath = "closest " + str(i) + ".png"
+        print(f"result {i} : ")
+        
+        imagematrix = image_to_matrix(image1path)
+        closestidx = EigenFunction.indeks_gambar_terdekat(imagematrix, K, psi, C_aksen, Omega, eigenface)
+        save_image_folder_idx(folderpath, closestidx, savepath)
     
     

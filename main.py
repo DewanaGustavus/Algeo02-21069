@@ -11,7 +11,4 @@ from PIL import ImageTk, Image
 from tkinter.filedialog import askopenfilenames
 
 
-
-
 if __name__ == "__main__":
-    pass
