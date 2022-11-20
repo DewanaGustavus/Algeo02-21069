@@ -25,7 +25,7 @@ def length(A):
 
 def QR(A):
     ctr = 1
-    while ctr != 5000:
+    while ctr != 10000:
         A = np.transpose(A)
         # looping menghitung matrix
         for i in range(len(A)):
@@ -45,7 +45,7 @@ def QR(A):
                 for j in range(len(tempval)):
                     sum += math.pow(tempval[j], 2)
                 sum = float(math.sqrt(sum))
-                tempval = (tempval / np.linalg.norm(tempval))
+                tempval = (tempval / sum)
                 eigenvector = np.append(eigenvector, [tempval], axis=0)
 
         A = np.transpose(A)        
@@ -142,7 +142,7 @@ def training(daftarface):
     return hasiltraining
 
 def indeks_gambar_terdekat(imagematrix, datatraining):
-    K, psi, C_aksen, Omega, eigenface = datatraining
+    K, C_aksen, psi, Omega, eigenface = datatraining
     matrix = np.array(imagematrix).flatten()
     matrix = np.subtract(matrix, psi)
 
