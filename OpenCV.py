@@ -48,7 +48,7 @@ def camera():
     
 if __name__ == "__main__":
     folderpath = "dataset\\"
-    image1path = folderpath + "ina1.png"
+    image1path = folderpath + "Lucy2.png"
     
     # tes training
     imagearray = open_image_folder_to_matrix(folderpath)
