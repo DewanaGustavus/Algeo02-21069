@@ -25,7 +25,7 @@ def length(A):
 
 def QR(A):
     ctr = 1
-    while ctr != 5000:
+    while ctr != 5:
         A = np.transpose(A)
         # looping menghitung matrix
         for i in range(len(A)):
@@ -81,10 +81,14 @@ def getEigenface(A, eigvec):
 
 def getOmega(A, B, K):
     print(len(A[0]))
-    for i in range(len(A[0])): # looping seluruh gambar
+    for i in range(len(A)): # looping seluruh gambar
         temp = A[i]
+        if (i==1):
+            print("vv ini temp")
+            print(temp)
+            print("^^ini temp")
         for k in range(K+1):
-            tempw = np.dot(vectorsatuan(B[k]), temp)
+            tempw = np.dot(B[k], temp)
             if k == 0:
                 l1 = [tempw]
             else:
@@ -95,7 +99,7 @@ def getOmega(A, B, K):
             Omega = np.append(Omega, [l1], axis=0)
 
     return Omega
-
+# getOmega(A_transpose, eigenface, K)
 
 def getEigenface(A, eigvec):
     eigvec = np.transpose(eigvec)
@@ -129,13 +133,18 @@ def training(daftarface):
     # transposekan eigenvector agar eigenface bisa diambil per baris
     eigenface = getEigenface(A_transpose, eigenvector)
     #eigenface = np.transpose(eigenface)
+    print("ini eigenface")
     print(eigenface)
+    print('sampe sini')
 
     # misalkan K sehingga K < M
     K = len(C_aksen) - 1
     
-    Omega = getOmega(A_transpose, eigenface, K)
+    eigenfaceT=np.transpose(eigenface)
+    Omega = getOmega(A_normal, eigenfaceT, K)
+    print("HOI")
     print(Omega)
+    print("HEREEEE")
     # Omega telah terbentuk
 
     hasiltraining = [K, C_aksen, psi, Omega, eigenface]
@@ -145,17 +154,20 @@ def indeks_gambar_terdekat(imagematrix, datatraining):
     K, C_aksen, psi, Omega, eigenface = datatraining
     matrix = np.array(imagematrix).flatten()
     matrix = np.subtract(matrix, psi)
-
+    
+    # matrix = np.transpose(matrix)
     # dotkan uj dengan ai
     eigenface = np.transpose(eigenface)
-
+    
     for k in range(K+1):
-        tempw = np.dot(vectorsatuan(eigenface[k]), matrix)
+        tempw = np.dot(eigenface[k], matrix)
         if k == 0:
             l1 = [tempw]
         else:
             l1 = np.append(l1, [tempw], axis=0)
-
+    
+    print(l1)
+    print("ajhfkjdshkjfds")
     # looping setiap Omega dataset dan cari yang paling minim selisihnya
     dist = [euclid_distance(l1, Omega[i]) for i in range(len(C_aksen))]
     print(dist)
