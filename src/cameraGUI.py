@@ -160,31 +160,22 @@ class App:
         ret, frame = self.vid.get_frame()
         if ret:
             cv2.imwrite("img\\camera photo.png", cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
-            self.imagematrix = image_to_matrix("img\\camera photo.png")
-            closestidx = EigenFunction.indeks_gambar_terdekat(self.imagematrix, self.hasiltraining)
+            imagematrix = image_to_matrix("img\\camera photo.png")
+            
+            closestidx = EigenFunction.indeks_gambar_terdekat(imagematrix, self.hasiltraining)
             savepath = "img\\closestimage.png"
-            resultpath = save_image_folder_idx(self.folder_path.get()+ '/', closestidx, savepath)
-            imgtemp = Image.open(savepath)
-            imgtemp = imgtemp.resize((256, 256), Image.Resampling.LANCZOS)
+            if closestidx == -1:
+                temp = "Tidak ada gambar yang mirip"
+                imgtemp = Image.open("img\\blank.png")
+            else:
+                files = os.listdir(self.folder_path.get())
+                temp = files[closestidx]
+                save_image_folder_idx(self.folder_path.get()+ '/', closestidx, savepath)
+                imgtemp = Image.open(savepath)
+                imgtemp = imgtemp.resize((256, 256), Image.Resampling.LANCZOS)
+
             self.img2.paste(imgtemp)
-            
-            
-            # display closest image name
-            temp=""
-            total=0
-            for a in resultpath:
-                if(a=="/"):
-                    total+=1
-            flag=0
-            for a in resultpath:
-                if(flag<total):
-                    if(a=='/'):
-                        flag+=1
-                else:
-                    temp=temp+a
             self.closestresult.set("Result : " + temp)
-            
-            
             self.canvas.itemconfigure(self.resname,text=self.closestresult.get())
 
     def update(self):
