@@ -1,27 +1,27 @@
 import numpy as np
 import math
 
-def vectorsatuan(vector):
-    sum = 0
-    for val in vector:
-        sum += math.pow(val, 2)
-    sum = math.sqrt(sum)
-    vectorsatuan = (vector/sum)
-    return vectorsatuan
+# def vectorsatuan(vector):
+#     sum = 0
+#     for val in vector:
+#         sum += math.pow(val, 2)
+#     sum = math.sqrt(sum)
+#     vectorsatuan = (vector/sum)
+#     return vectorsatuan
+
+# def length(A):
+#     sum = 0
+
+#     for i in A:
+#         sum += math.pow(i, 2)
+
+#     return sum
 
 def euclid_distance(A, B):
     dist = 0
     for i in range(len(A)):
         dist += math.pow(A[i] - B[i], 2)
     return dist
-
-def length(A):
-    sum = 0
-
-    for i in A:
-        sum += math.pow(i, 2)
-
-    return sum
 
 def QR(A):
     ctr = 1
@@ -40,12 +40,12 @@ def QR(A):
             else:
                 starttempval = tempval
                 for k in range(i):
-                    tempval = (tempval - (((np.dot(eigenvector[k], starttempval)) / length(eigenvector[k])) * eigenvector[k]))
+                    tempval = (tempval - ((np.dot(eigenvector[k], starttempval)) * eigenvector[k]))
 
                 for j in range(len(tempval)):
                     sum += math.pow(tempval[j], 2)
                 sum = float(math.sqrt(sum))
-                tempval = (tempval / np.linalg.norm(tempval))
+                tempval = (tempval / sum)
                 eigenvector = np.append(eigenvector, [tempval], axis=0)
 
         A = np.transpose(A)        
@@ -62,16 +62,6 @@ def QR(A):
         ctr+=1
 
     return A, temp
-
-def getEigenValue(A):
-    eigenvalue = [A[0][0]]
-    for i in range(1,len(A)):
-        eigenvalue = np.append(eigenvalue, [A[i][i]], axis = 0)
-    return eigenvalue
-
-def getW(A, B, K):
-    temp = np.dot(vectorsatuan(A), B)
-    return temp
 
 def getEigenface(A, eigvec):
     eigvec = np.transpose(eigvec)
@@ -94,13 +84,6 @@ def getOmega(A, B, K):
             Omega = np.append(Omega, [l1], axis=0)
 
     return Omega
-# getOmega(A_transpose, eigenface, K)
-
-def getEigenface(A, eigvec):
-    eigvec = np.transpose(eigvec)
-    temp = np.array([np.matmul(A, eigvec[i]) for i in range(len(eigvec))])
-    eigenface = np.transpose(temp)
-    return eigenface
 
 def training(daftarface):
     # mengubah matrix jadi M x N^2 , harus di loop untuk setiap gambar
@@ -127,7 +110,6 @@ def training(daftarface):
     C_aksen, eigenvector = QR(C_aksen)
     # transposekan eigenvector agar eigenface bisa diambil per baris
     eigenface = getEigenface(A_transpose, eigenvector)
-    #eigenface = np.transpose(eigenface)
 
     # misalkan K sehingga K < M
     K = len(C_aksen) - 1
@@ -144,7 +126,6 @@ def indeks_gambar_terdekat(imagematrix, datatraining):
     matrix = np.array(imagematrix).flatten()
     matrix = np.subtract(matrix, psi)
     
-    # matrix = np.transpose(matrix)
     # dotkan uj dengan ai
     eigenface = np.transpose(eigenface)
     
