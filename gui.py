@@ -10,12 +10,6 @@ from OpenCV import *
 from timeit import default_timer as timer
 import os
 
-OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\User\Desktop\ui4\build\assets\frame0")
-
-def relative_to_assets(path: str) -> Path:
-    return ASSETS_PATH / Path(path)
-
 # BUTTON FUNCTIONS
 def browse_button():
     # Allow user to select a directory and store it in global var
@@ -45,7 +39,6 @@ def open_img():
             total+=1
     flag=0
     for a in qq:
-        print(a)
         if(flag<total):
             if(a=='/'):
                 flag+=1
@@ -132,8 +125,7 @@ image_3 = canvas.create_image(
 )
 
 # Button to start training
-button_image_1 = PhotoImage(
-    file=relative_to_assets("buttonup.png"))
+button_image_1 = ImageTk.PhotoImage(Image.open("newtraining.png"))
 button_1 = Button(
     image=button_image_1,
     borderwidth=0,
@@ -148,8 +140,7 @@ button_1.place(
 )
 
 # Button to find closest image in dataset with input
-button_image_2 = PhotoImage(
-    file=relative_to_assets("buttondown.png"))
+button_image_2 = ImageTk.PhotoImage(Image.open("newrecognize.png"))
 button_2 = Button(
     image=button_image_2,
     borderwidth=0,
@@ -169,12 +160,11 @@ canvas.create_rectangle(
     115.0,
     267.0,
     205.0,
-    fill="#343F55",
+    fill="#141418",
     outline="")
 
 # Button to choose directory
-button_image_3 = PhotoImage(
-    file=relative_to_assets("button_3.png"))
+button_image_3= ImageTk.PhotoImage(Image.open("buttonicon.png"))
 button_3 = Button(
     image=button_image_3,
     borderwidth=0,
@@ -194,12 +184,11 @@ canvas.create_rectangle(
     321.0,
     267.0,
     378.0,
-    fill="#343F55",
+    fill="#141418",
     outline="")
 
 # Button to choose image for recognition
-button_image_4 = PhotoImage(
-    file=relative_to_assets("button_4.png"))
+button_image_4= ImageTk.PhotoImage(Image.open("buttonicon.png"))
 button_4 = Button(
     image=button_image_4,
     borderwidth=0,
@@ -222,13 +211,13 @@ timeexec=canvas.create_text(
     anchor="nw",
     text=time_elapsed.get(),
     fill="#FCFCFC",
-    font=("MicrosoftJhengHeiUILight", 13 * -1)
+    font=("Microsoft JhengHei UI Light", 13 * -1)
 )
 
 # Label to show chosen folder
 folder_path = StringVar()
 folder_path.set("No folder selected.")
-label3 = Label(window, textvariable=folder_path,wraplength=120,height=3,font=("Microsoft JhengHei UI Light", 10),fg="#B7BBC2",bg="#343f55")
+label3 = Label(window, textvariable=folder_path,wraplength=120,height=3,font=("Microsoft JhengHei UI Light", 10),fg="#B7BBC2",bg="#141418")
 label3.grid(column=0, row=0,pady=(130,0),padx=(75,0))
 
 '''
@@ -251,7 +240,7 @@ imgselect= canvas.create_text(
     anchor="nw",
     text=selection.get(),
     fill="#B7BBC2",
-    font=("MicrosoftJhengHeiUIRegular", 13 * -1)
+    font=("Microsoft JhengHei UI Regular", 13 * -1)
 )
 
 canvas.create_text(
@@ -260,7 +249,7 @@ canvas.create_text(
     anchor="nw",
     text="Select Dataset",
     fill="#FFFFFF",
-    font=("MicrosoftJhengHeiBold", 16 * -1)
+    font=("Microsoft JhengHei Bold", 16 * -1)
 )
 
 canvas.create_text(
@@ -269,7 +258,7 @@ canvas.create_text(
     anchor="nw",
     text="Select Image",
     fill="#FFFFFF",
-    font=("MicrosoftJhengHeiBold", 16 * -1)
+    font=("Microsoft JhengHei Bold", 16 * -1)
 )
 window.resizable(False, False)
 window.mainloop()
