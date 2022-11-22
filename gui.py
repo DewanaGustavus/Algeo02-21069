@@ -13,7 +13,6 @@ import os
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"C:\Users\User\Desktop\ui4\build\assets\frame0")
 
-
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
@@ -110,8 +109,7 @@ canvas = Canvas(
 )
 
 canvas.place(x = 0, y = 0)
-image_image_1 = PhotoImage(
-    file=relative_to_assets("image_1.png"))
+image_image_1 = ImageTk.PhotoImage(Image.open("testname.png"))
 image_1 = canvas.create_image(
     486.0,
     260.0,
