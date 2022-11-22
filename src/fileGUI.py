@@ -75,7 +75,6 @@ def recognize():
 	global hasiltraining
 	global folder_path
 	global img2
-	global resultpath
 	closestidx = EigenFunction.indeks_gambar_terdekat(imagematrix, hasiltraining)
 	savepath = "img\\closestimage.png"
 	if closestidx == -1:
@@ -84,7 +83,7 @@ def recognize():
 	else:
 		files = os.listdir(folder_path.get())
 		temp = files[closestidx]
-		resultpath=save_image_folder_idx(folder_path.get()+ '/', closestidx, savepath)
+		save_image_folder_idx(folder_path.get()+ '/', closestidx, savepath)
 		imgtemp = Image.open(savepath)
 		imgtemp = imgtemp.resize((256, 256), Image.Resampling.LANCZOS)
 
