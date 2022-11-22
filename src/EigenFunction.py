@@ -1,22 +1,6 @@
 import numpy as np
 import math
 
-# def vectorsatuan(vector):
-#     sum = 0
-#     for val in vector:
-#         sum += math.pow(val, 2)
-#     sum = math.sqrt(sum)
-#     vectorsatuan = (vector/sum)
-#     return vectorsatuan
-
-# def length(A):
-#     sum = 0
-
-#     for i in A:
-#         sum += math.pow(i, 2)
-
-#     return sum
-
 def euclid_distance(A, B):
     dist = 0
     for i in range(len(A)):
