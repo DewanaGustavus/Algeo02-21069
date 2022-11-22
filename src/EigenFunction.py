@@ -139,6 +139,14 @@ def indeks_gambar_terdekat(imagematrix, datatraining):
     # looping setiap Omega dataset dan cari yang paling minim selisihnya
     dist = [euclid_distance(l1, Omega[i]) for i in range(len(C_aksen))]
     minimum = min(dist)
-    minidx = dist.index(minimum)
-    print(dist)
-    return minidx
+    
+    tolerance=0
+    for i in dist:
+        tolerance+=i
+    tolerance=(tolerance/len(C_aksen))*0.1
+    
+    if minimum < tolerance :
+        minidx = dist.index(minimum)
+        return minidx
+    else :
+        return -1
