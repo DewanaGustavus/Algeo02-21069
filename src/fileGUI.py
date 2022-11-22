@@ -291,6 +291,7 @@ def start():
 		font=("Microsoft JhengHei Bold", 16 * -1)
 	)
 	window.resizable(False, False)
+	window.title("Face Recognition with Files")
 	window.mainloop()
 
 if __name__ == "__main__":
