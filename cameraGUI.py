@@ -14,6 +14,7 @@ class App:
         self.window.title(window_title)
         self.window.configure(bg='white')
         self.video_source = video_source
+        self.title='test'
         self.vid = MyVideoCapture(self.video_source)
 
 
@@ -176,3 +177,4 @@ def start():
 
 if __name__ == "__main__":
     start()
+    

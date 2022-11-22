@@ -1,13 +1,21 @@
 import numpy as np
 import math
 
-def vectorsatuan(vector):
-    sum = 0
-    for val in vector:
-        sum += math.pow(val, 2)
-    sum = math.sqrt(sum)
-    vectorsatuan = (vector/sum)
-    return vectorsatuan
+# def vectorsatuan(vector):
+#     sum = 0
+#     for val in vector:
+#         sum += math.pow(val, 2)
+#     sum = math.sqrt(sum)
+#     vectorsatuan = (vector/sum)
+#     return vectorsatuan
+
+# def length(A):
+#     sum = 0
+
+#     for i in A:
+#         sum += math.pow(i, 2)
+
+#     return sum
 
 def euclid_distance(A, B):
     dist = 0
@@ -15,17 +23,9 @@ def euclid_distance(A, B):
         dist += math.pow(A[i] - B[i], 2)
     return dist
 
-def length(A):
-    sum = 0
-
-    for i in A:
-        sum += math.pow(i, 2)
-
-    return sum
-
 def QR(A):
     ctr = 1
-    while ctr != 10000:
+    while ctr != 5:
         A = np.transpose(A)
         # looping menghitung matrix
         for i in range(len(A)):
@@ -40,7 +40,7 @@ def QR(A):
             else:
                 starttempval = tempval
                 for k in range(i):
-                    tempval = (tempval - (((np.dot(eigenvector[k], starttempval)) / length(eigenvector[k])) * eigenvector[k]))
+                    tempval = (tempval - ((np.dot(eigenvector[k], starttempval)) * eigenvector[k]))
 
                 for j in range(len(tempval)):
                     sum += math.pow(tempval[j], 2)
@@ -63,16 +63,6 @@ def QR(A):
 
     return A, temp
 
-def getEigenValue(A):
-    eigenvalue = [A[0][0]]
-    for i in range(1,len(A)):
-        eigenvalue = np.append(eigenvalue, [A[i][i]], axis = 0)
-    return eigenvalue
-
-def getW(A, B, K):
-    temp = np.dot(vectorsatuan(A), B)
-    return temp
-
 def getEigenface(A, eigvec):
     eigvec = np.transpose(eigvec)
     temp = np.array([np.matmul(A, eigvec[i]) for i in range(len(eigvec))])
@@ -80,11 +70,10 @@ def getEigenface(A, eigvec):
     return eigenface
 
 def getOmega(A, B, K):
-    print(len(A[0]))
-    for i in range(len(A[0])): # looping seluruh gambar
+    for i in range(len(A)): # looping seluruh gambar
         temp = A[i]
         for k in range(K+1):
-            tempw = np.dot(vectorsatuan(B[k]), temp)
+            tempw = np.dot(B[k], temp)
             if k == 0:
                 l1 = [tempw]
             else:
@@ -95,13 +84,6 @@ def getOmega(A, B, K):
             Omega = np.append(Omega, [l1], axis=0)
 
     return Omega
-
-
-def getEigenface(A, eigvec):
-    eigvec = np.transpose(eigvec)
-    temp = np.array([np.matmul(A, eigvec[i]) for i in range(len(eigvec))])
-    eigenface = np.transpose(temp)
-    return eigenface
 
 def training(daftarface):
     # mengubah matrix jadi M x N^2 , harus di loop untuk setiap gambar
@@ -128,14 +110,12 @@ def training(daftarface):
     C_aksen, eigenvector = QR(C_aksen)
     # transposekan eigenvector agar eigenface bisa diambil per baris
     eigenface = getEigenface(A_transpose, eigenvector)
-    #eigenface = np.transpose(eigenface)
-    print(eigenface)
 
     # misalkan K sehingga K < M
     K = len(C_aksen) - 1
     
-    Omega = getOmega(A_transpose, eigenface, K)
-    print(Omega)
+    eigenfaceT=np.transpose(eigenface)
+    Omega = getOmega(A_normal, eigenfaceT, K)
     # Omega telah terbentuk
 
     hasiltraining = [K, C_aksen, psi, Omega, eigenface]
@@ -145,20 +125,19 @@ def indeks_gambar_terdekat(imagematrix, datatraining):
     K, C_aksen, psi, Omega, eigenface = datatraining
     matrix = np.array(imagematrix).flatten()
     matrix = np.subtract(matrix, psi)
-
+    
     # dotkan uj dengan ai
     eigenface = np.transpose(eigenface)
-
+    
     for k in range(K+1):
-        tempw = np.dot(vectorsatuan(eigenface[k]), matrix)
+        tempw = np.dot(eigenface[k], matrix)
         if k == 0:
             l1 = [tempw]
         else:
             l1 = np.append(l1, [tempw], axis=0)
-
+    
     # looping setiap Omega dataset dan cari yang paling minim selisihnya
     dist = [euclid_distance(l1, Omega[i]) for i in range(len(C_aksen))]
-    print(dist)
     minimum = min(dist)
     minidx = dist.index(minimum)
     return minidx
