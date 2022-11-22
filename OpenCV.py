@@ -32,6 +32,7 @@ def save_image_folder_idx(folderpath, idx, savepath):
     files = os.listdir(folderpath)
     imagepath = folderpath + files[idx]
     shutil.copyfile(imagepath, savepath)
+    return imagepath
     
 def camera():
     vid = cv.VideoCapture(0)

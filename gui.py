@@ -77,12 +77,32 @@ def recognize():
     global hasiltraining
     global folder_path
     global img2
+    global resultpath
     closestidx = EigenFunction.indeks_gambar_terdekat(imagematrix, hasiltraining)
     savepath = "closestimage.png"
-    save_image_folder_idx(folder_path.get()+ '/', closestidx, savepath)
+    
+    resultpath=save_image_folder_idx(folder_path.get()+ '/', closestidx, savepath)
     imgtemp = Image.open(savepath)
     imgtemp = imgtemp.resize((256, 256), Image.Resampling.LANCZOS)
     img2.paste(imgtemp)
+    
+    temp=""
+    
+    total=0
+    for a in resultpath:
+        if(a=="/"):
+            total+=1
+    flag=0
+    for a in resultpath:
+        if(flag<total):
+            if(a=='/'):
+                flag+=1
+        else:
+            temp=temp+a
+    closestresult.set("Result : " + temp)
+    
+    
+    canvas.itemconfigure(resname,text=closestresult.get())
     
 
 
@@ -250,6 +270,17 @@ canvas.create_text(
     text="Select Dataset",
     fill="#FFFFFF",
     font=("Microsoft JhengHei Bold", 16 * -1)
+)
+
+closestresult=StringVar()
+closestresult.set("Result : -")
+resname=canvas.create_text(
+    670,
+    450.0,
+    anchor="nw",
+    text=closestresult.get(),
+    fill="#FFFFFF",
+    font=("Microsoft JhengHei Bold", 14 * -1)
 )
 
 canvas.create_text(
