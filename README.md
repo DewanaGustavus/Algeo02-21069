@@ -14,16 +14,11 @@
 
 ### Table of Contents
 
-- [Algeo01-21110](#algeo01-21110)
-  - [TUGAS BESAR 2 IF2123 ALJABAR LINIER DAN GEOMETRI SISTEM PERSAMAAN LINIER DETERMINAN, DAN APLIKASINYA](#tugas-besar-2-if2123-aljabar-linier-dan-geometri-sistem-persamaan-linier-determinan-dan-aplikasinya)
-    - [SEMESTER 1 TAHUN 2022/2023](#semester-1-tahun-20222023)
-    - [Kelompok 21 DewaLoKi](#kelompok-21-dewaloki)
-    - [Table of Contents](#table-of-contents)
-    - [Cara Menjalankan Program](#cara-menjalankan-program)
-    - [Tekonologi yang Digunakan](#tekonologi-yang-digunakan)
-    - [Tampilan Menu](#tampilan-menu)
-    - [Cara Menggunakan](#cara-menggunakan)
-    - [Contoh Penggunaan](#contoh-penggunaan)
+1. [Cara Menjalankan Program](#cara-menjalankan-program)
+2. [Tekonologi yang Digunakan](#tekonologi-yang-digunakan)
+3. [Tampilan Menu](#tampilan-menu)
+4. [Cara Menggunakan](#cara-menggunakan)
+5. [Contoh Penggunaan](#contoh-penggunaan)
 
 ### Cara Menjalankan Program
 
@@ -60,7 +55,7 @@ python main.py
 3. Klik select dataset dan pilih folder yang berisi dataset gambar.
 4. Klik training untuk men-train program dengan dataset yang diberikan.
 5. Untuk recognition menggunakan files piilh gambar yang ingin di recognize pada bagian select image lalu klik recognize.
-6. Untuk recognition menggunakan camera posisikan kamera lalu klik recognize apabila dirasa kamera sudah pas. 
+6. Untuk recognition menggunakan camera posisikan kamera lalu klik recognize apabila dirasa kamera sudah pas.
 7. Program akan melakukan face recognition dan akan menampilkan gambar pada dataset yang mirip dengan input.
 
 ### Contoh Penggunaan
