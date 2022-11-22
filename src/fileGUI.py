@@ -104,7 +104,13 @@ def recognize():
     
 
 def start():
+	global imagematrix	
+	global folder_path
+	global img2
+	global time_elapsed
+	global selection
 	global closestresult
+	global img
 	global canvas
 	global resname
 	global imgselect

@@ -219,10 +219,29 @@ class App:
             self.imagematrix = image_to_matrix("img\\camera photo.png")
             closestidx = EigenFunction.indeks_gambar_terdekat(self.imagematrix, self.hasiltraining)
             savepath = "img\\closestimage.png"
-            save_image_folder_idx(self.folder_path.get()+ '/', closestidx, savepath)
+            resultpath = save_image_folder_idx(self.folder_path.get()+ '/', closestidx, savepath)
             imgtemp = Image.open(savepath)
             imgtemp = imgtemp.resize((256, 256), Image.Resampling.LANCZOS)
             self.img2.paste(imgtemp)
+            
+            
+            # display closest image name
+            temp=""
+            total=0
+            for a in resultpath:
+                if(a=="/"):
+                    total+=1
+            flag=0
+            for a in resultpath:
+                if(flag<total):
+                    if(a=='/'):
+                        flag+=1
+                else:
+                    temp=temp+a
+            self.closestresult.set("Result : " + temp)
+            
+            
+            self.canvas.itemconfigure(self.resname,text=self.closestresult.get())
 
     def update(self):
         # Get a frame from the video source
@@ -230,15 +249,12 @@ class App:
 
         if ret:
             frame = self.vid.rescale_frame(frame)
-            self.img = ImageTk.PhotoImage(image = PIL.Image.fromarray(frame))
-            self.imgLabel = tkinter.Label(self.frame3, image=self.img)
-            self.imgLabel.grid(column=0, row=1,pady=(10,0))
-            self.label4 = tkinter.Label(self.frame4, text="Closest Result", font=("Microsoft JhengHei UI Light", 13), bg="white")
-            self.label4.grid(column=0, row=0)
+            imgtemp = PIL.Image.fromarray(frame)
+            # self.imgtemp = ImageTk.PhotoImage(image = PIL.Image.fromarray(frame))
+            self.img.paste(imgtemp)
 
         self.window.after(self.delay, self.update)
         
-    # BUTTON FUNCTIONS
     def browse_button(self):
         # Allow user to select a directory and store it in global var
         # called folder_path

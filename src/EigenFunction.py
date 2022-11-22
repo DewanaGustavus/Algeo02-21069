@@ -82,13 +82,12 @@ def getEigenface(A, eigvec):
 def getOmega(A, B, K):
     for i in range(len(A)): # looping seluruh gambar
         temp = A[i]
-        if (i==1):
-            for k in range(K+1):
-                tempw = np.dot(B[k], temp)
-                if k == 0:
-                    l1 = [tempw]
-                else:
-                    l1 = np.append(l1, [tempw], axis=0)
+        for k in range(K+1):
+            tempw = np.dot(B[k], temp)
+            if k == 0:
+                l1 = [tempw]
+            else:
+                l1 = np.append(l1, [tempw], axis=0)
         if i == 0:
             Omega = [l1]
         else:
@@ -160,4 +159,5 @@ def indeks_gambar_terdekat(imagematrix, datatraining):
     dist = [euclid_distance(l1, Omega[i]) for i in range(len(C_aksen))]
     minimum = min(dist)
     minidx = dist.index(minimum)
+    print(dist)
     return minidx
