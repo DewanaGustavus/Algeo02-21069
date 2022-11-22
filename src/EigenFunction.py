@@ -80,19 +80,15 @@ def getEigenface(A, eigvec):
     return eigenface
 
 def getOmega(A, B, K):
-    print(len(A[0]))
     for i in range(len(A)): # looping seluruh gambar
         temp = A[i]
         if (i==1):
-            print("vv ini temp")
-            print(temp)
-            print("^^ini temp")
-        for k in range(K+1):
-            tempw = np.dot(B[k], temp)
-            if k == 0:
-                l1 = [tempw]
-            else:
-                l1 = np.append(l1, [tempw], axis=0)
+            for k in range(K+1):
+                tempw = np.dot(B[k], temp)
+                if k == 0:
+                    l1 = [tempw]
+                else:
+                    l1 = np.append(l1, [tempw], axis=0)
         if i == 0:
             Omega = [l1]
         else:
@@ -133,18 +129,12 @@ def training(daftarface):
     # transposekan eigenvector agar eigenface bisa diambil per baris
     eigenface = getEigenface(A_transpose, eigenvector)
     #eigenface = np.transpose(eigenface)
-    print("ini eigenface")
-    print(eigenface)
-    print('sampe sini')
 
     # misalkan K sehingga K < M
     K = len(C_aksen) - 1
     
     eigenfaceT=np.transpose(eigenface)
     Omega = getOmega(A_normal, eigenfaceT, K)
-    print("HOI")
-    print(Omega)
-    print("HEREEEE")
     # Omega telah terbentuk
 
     hasiltraining = [K, C_aksen, psi, Omega, eigenface]
@@ -166,11 +156,8 @@ def indeks_gambar_terdekat(imagematrix, datatraining):
         else:
             l1 = np.append(l1, [tempw], axis=0)
     
-    print(l1)
-    print("ajhfkjdshkjfds")
     # looping setiap Omega dataset dan cari yang paling minim selisihnya
     dist = [euclid_distance(l1, Omega[i]) for i in range(len(C_aksen))]
-    print(dist)
     minimum = min(dist)
     minidx = dist.index(minimum)
     return minidx

@@ -10,9 +10,9 @@ def image_to_matrix(imagepath):
     im = Image.open(imagepath)
     sqrWidth = 256
     im_resize = im.resize((sqrWidth, sqrWidth))
-    im_resize.save("tmpoutput.png")
-    image = cv.imread("tmpoutput.png", 0) # 0 for black and white mode
-    os.remove("tmpoutput.png")
+    im_resize.save("img\\tmpoutput.png")
+    image = cv.imread("img\\tmpoutput.png", 0) # 0 for black and white mode
+    os.remove("img\\tmpoutput.png")
     return image
 
 def matrix_to_image(matrix, savepath):
@@ -33,19 +33,6 @@ def save_image_folder_idx(folderpath, idx, savepath):
     imagepath = folderpath + files[idx]
     shutil.copyfile(imagepath, savepath)
     return imagepath
-    
-def camera():
-    vid = cv.VideoCapture(0)
-    while(True):
-        ret, frame = vid.read()
-        cv.imshow("Camera", frame) 
-        if cv.waitKey(1) & 0xFF == ord('q'):
-            break
-        if cv.waitKey(1) & 0xFF == ord('w'):
-            cv.imwrite('opencv'+'.png', frame)
-
-    vid.release()
-    cv.destroyAllWindows()
     
 if __name__ == "__main__":
     folderpath = "anyatest\\"
