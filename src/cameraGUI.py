@@ -111,31 +111,6 @@ class App:
             height=22.0
         )
 
-        self.canvas.create_rectangle(
-            61.0,
-            321.0,
-            267.0,
-            378.0,
-            fill="#141418",
-            outline="")
-
-        # Button to choose image for recognition
-        """
-        self.button_image_4= ImageTk.PhotoImage(Image.open("img\\buttonicon.png"))
-        self.button_4 = tkinter.Button(
-            image=self.button_image_4,
-            borderwidth=0,
-            highlightthickness=0,
-            command=self.open_img,
-            relief="flat"
-        )
-        self.button_4.place(
-            x=228.0,
-            y=339.0,
-            width=24.0,
-            height=22.0
-        )
-        """
         self.time_elapsed = tkinter.StringVar()
         self.time_elapsed.set("Execution time: ")
         self.timeexec=self.canvas.create_text(
@@ -153,28 +128,6 @@ class App:
         self.label3 = tkinter.Label(window, textvariable=self.folder_path,wraplength=120,height=3,font=("Microsoft JhengHei UI Light", 10),fg="#B7BBC2",bg="#141418")
         self.label3.grid(column=0, row=0,pady=(130,0),padx=(75,0))
 
-        '''
-        canvas.create_text(
-            75.0,
-            128.0,
-            anchor="nw",
-            text="No folder selected.",
-            fill="#B7BBC2",
-            font=("MicrosoftJhengHeiUIRegular", 13 * -1),
-            width=0
-        )
-        '''
-
-        self.selection=tkinter.StringVar()
-        self.selection.set("No image selected.")
-        self.imgselect=self.canvas.create_text(
-            75.0,
-            332.0,
-            anchor="nw",
-            text=self.selection.get(),
-            fill="#B7BBC2",
-            font=("Microsoft JhengHei UI Regular", 13 * -1)
-        )
 
         self.canvas.create_text(
             57.0,
@@ -194,15 +147,6 @@ class App:
             text=self.closestresult.get(),
             fill="#FFFFFF",
             font=("Microsoft JhengHei Bold", 14 * -1)
-        )
-
-        self.canvas.create_text(
-            57.0,
-            298.0,
-            anchor="nw",
-            text="Select Image",
-            fill="#FFFFFF",
-            font=("Microsoft JhengHei Bold", 16 * -1)
         )
 
         # After it is called once, the update method will be automatically called every delay milliseconds

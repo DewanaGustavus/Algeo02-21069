@@ -71,36 +71,26 @@ def start_training():
     canvas.itemconfigure(timeexec,text=time_elapsed.get())
 
 def recognize():
-    global imagematrix
-    global hasiltraining
-    global folder_path
-    global img2
-    global resultpath
-    closestidx = EigenFunction.indeks_gambar_terdekat(imagematrix, hasiltraining)
-    savepath = "img\\closestimage.png"
-    
-    resultpath=save_image_folder_idx(folder_path.get()+ '/', closestidx, savepath)
-    imgtemp = Image.open(savepath)
-    imgtemp = imgtemp.resize((256, 256), Image.Resampling.LANCZOS)
-    img2.paste(imgtemp)
-    
-    temp=""
-    
-    total=0
-    for a in resultpath:
-        if(a=="/"):
-            total+=1
-    flag=0
-    for a in resultpath:
-        if(flag<total):
-            if(a=='/'):
-                flag+=1
-        else:
-            temp=temp+a
-    closestresult.set("Result : " + temp)
-    
-    
-    canvas.itemconfigure(resname,text=closestresult.get())
+	global imagematrix
+	global hasiltraining
+	global folder_path
+	global img2
+	global resultpath
+	closestidx = EigenFunction.indeks_gambar_terdekat(imagematrix, hasiltraining)
+	savepath = "img\\closestimage.png"
+	if closestidx == -1:
+		temp = "Tidak ada gambar yang mirip"
+		imgtemp = Image.open("img\\blank.png")
+	else:
+		files = os.listdir(folder_path.get())
+		temp = files[closestidx]
+		resultpath=save_image_folder_idx(folder_path.get()+ '/', closestidx, savepath)
+		imgtemp = Image.open(savepath)
+		imgtemp = imgtemp.resize((256, 256), Image.Resampling.LANCZOS)
+
+	img2.paste(imgtemp)
+	closestresult.set("Result : " + temp)
+	canvas.itemconfigure(resname,text=closestresult.get())
     
 
 def start():
